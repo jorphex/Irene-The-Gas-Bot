@@ -1,0 +1,21 @@
+# specify base image
+FROM python:3.9-slim-buster
+
+# set working directory
+WORKDIR /app
+
+# copy requirements file
+COPY requirements.txt .
+
+# install dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# copy source code
+COPY gas_bot.py .
+
+# set environment variable
+ENV DISCORD_BOT_TOKEN=YOUR_BOT_TOKEN
+ENV SERVER_ID=YOUR_SERVER_ID
+
+# start script on container launch
+CMD [ "python", "gas_bot.py" ]
