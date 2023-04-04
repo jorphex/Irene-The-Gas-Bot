@@ -23,7 +23,7 @@ def get_gas_prices():
         gas_price_gwei = gas_price // 10**9 # divide to convert wei to gwei
         return gas_price_gwei
     except Exception as e:
-        print(f"[{current_time}] Error fetching gas prices: {e}")
+        print(f"[{current_time}] Error fetching gas price: {e}. Retrying...")
         return None
 
 # function to update bot name and avatar on server
@@ -36,7 +36,7 @@ async def update_bot():
         try:
             gas_price = get_gas_prices()
         except Exception as e:
-            print(f"[{current_time}] Error retrieving gas price: {e}")
+            print(f"[{current_time}] Error fetching gas price: {e}. Retrying...")
             gas_price = None
         if gas_price is not None:
             above_threshold = gas_price > threshold
@@ -61,7 +61,10 @@ async def update_bot():
                             await member.edit(nick=bot_nickname)
                             # Print message indicating the bot's nickname has been updated
                             print(f"[{current_time}] Nickname updated to {bot_nickname}")
-                        
+                        else:
+                            # Print message indicating that the nickname was not updated
+                            print(f"[{current_time}] Gas is still {bot_nickname}, no nickname update needed.")
+
                         # Update role
                         role = discord.utils.get(guild.roles, name=role_name)
                         if role is None:
